@@ -1,0 +1,98 @@
+<div #tableBox id="tableResults" class="table-panel hidden" cdkDragBoundary=".mapView" cdkDrag [hidden]="isCloseClicked">
+
+  <div class="tbl-header">
+    <div class="tbl-header-controls" cdkDragHandle>
+      <button mat-icon-button #menuTrigger="matMenuTrigger" class="menu-button angular-button"
+        [matMenuTriggerFor]="menu" [matMenuTriggerData]="menuListItems" aria-label="Menu" i18n-title title="Open Menu"
+        (click)="openMenu()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+
+    <span flex="" class="tbl-spacer flex" cdkDragHandle>
+      <mat-menu #menu="matMenu">
+        <ng-template matMenuContent let-name="name">
+          <button mat-menu-item *ngFor="let item of menuListItems" [disabled]="item.isDisabled"
+            (click)="clickMenuItem(item.tableId)">
+            <mat-icon>{{item.menuIcon}}</mat-icon>
+            <span>{{item.menuLinkText}}</span>
+          </button>
+        </ng-template>
+      </mat-menu>
+    </span>
+
+    <div class="tbl-header-controls">
+      <button mat-icon-button class="angular-button" color="primary" aria-label="Download" i18n-title
+        title="Download Results" #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="menuDownload">
+        <mat-icon>download</mat-icon>
+      </button>
+    </div>
+
+    <mat-menu #menuDownload="matMenu">
+      <ng-template matMenuContent let-name="name">
+        <button class="export-menu" mat-menu-item (click)="exportResult()">
+          <span>Export to csv</span>
+        </button>
+      </ng-template>
+    </mat-menu>
+
+    <div class="tbl-header-controls">
+      <button mat-icon-button color="primary" class="angular-button close-button" i18n-title title="Close Results"
+        (click)="tableBox.hidden=true;resetGraphic()">
+        <mat-icon aria-hidden="true" attr.aria-label="Close">close</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="tbl-body" id="body-parent">
+
+    <div id="tabButton" [hidden]=true>
+      <button i18n class="mat-stroked-button" id="parcelButton" (click)="openTab('divParcel')">Parcels</button>
+      <button i18n class="mat-stroked-button" id="projectButton" (click)="openTab('divProject')">Surveys in Progress</button>
+      <button i18n class="mat-stroked-button" id="planButton" (click)="openTab('divPlan')">Plan</button>
+      <button i18n class="mat-stroked-button" id="townButton" (click)="openTab('divTownship')">Township</button>
+      <button i18n class="mat-stroked-button" id="adminButton" (click)="openTab('divAdmin')">Administrative Area</button>
+    </div>
+
+    <div class="hidden" id="divAdmin">
+      <app-table-master #table
+        [tableColumns]="tableColumnsAdmin"
+        [tableData]="admin">
+      </app-table-master>
+    </div>
+    <div class="hidden" id="divProject">
+      <app-table-master
+        [tableColumns]="tableColumnsProject"
+        [tableData]="project">
+      </app-table-master>
+    </div>
+    <div class="hidden" id="divPlan">
+      <app-table-master
+        [tableColumns]="tableColumnsPlan"
+        [tableData]="plan">
+      </app-table-master>
+    </div>
+    <div class="hidden" id="divTownship">
+      <app-table-master
+        [tableColumns]="tableColumnsTown"
+        [tableData]="town">
+      </app-table-master>
+    </div>
+    <div class="hidden" id="divParcel">
+      <app-table-master
+        [tableColumns]="tableColumnsParcel"
+        [tableData]="parcel">
+      </app-table-master>
+    </div>
+
+    <div class="container">
+      <div hidden id="result-message" class="child-container">
+        <h5 i18n>Click on tab to show results</h5>
+        <p i18n>Search results are limited to 1000</p>
+      </div>
+      <div hidden id="result-spinner" class="loader child-container"></div>
+    </div>
+
+  </div>
+
+</div>
